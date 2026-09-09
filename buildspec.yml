@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Fetching AWS Account ID..."
+      - export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - echo "Account ID $ACCOUNT_ID"
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+      - echo "Using BRANCH_NAME = $BRANCH_NAME"
+      - if [ -z "$BRANCH_NAME" ]; then echo "BRANCH_NAME is not set. Exiting."; exit 1; fi
+  build:
+    commands:
+      - |
+        if [ "$BRANCH_NAME" = "master" ]; then
+          export IMAGE_NAME="react-app"
+        else
+          export IMAGE_NAME="react-app-dev"
+        fi
+      - echo "Building the Docker image for frontend..."
+      - docker build -t $IMAGE_NAME .
+      - docker tag $IMAGE_NAME:latest $ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/$IMAGE_NAME:latest
+      - echo "$BRANCH_NAME" > branch.txt
+  post_build:
+    commands:
+      - echo "Pushing the image to Amazon ECR..."
+      - docker push $ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/$IMAGE_NAME:latest
+      - printf '[{"name":"$IMAGE_NAME","imageUri":"%s"}]' $ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/$IMAGE_NAME:latest > imagedefinitions.json
+
+artifacts:
+  files: 
+    - appspec.yml
+    - scripts/**
+    - imagedefinitions.json
+    - branch.txt
