@@ -11,6 +11,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Tooltip,
 } from "@mui/material";
 import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
@@ -445,28 +446,28 @@ const EmploymentDetailsPage = ({
   });
   console.log("localData,,", localData)
 
-//   useEffect(() => {
-//   if (candidateDetails?.resume_data) {
-//     setDetailsLoading(false);
-//     return;
-//   }
+  //   useEffect(() => {
+  //   if (candidateDetails?.resume_data) {
+  //     setDetailsLoading(false);
+  //     return;
+  //   }
 
-//   const fetchDetails = async () => {
-//     setDetailsLoading(true);
+  //   const fetchDetails = async () => {
+  //     setDetailsLoading(true);
 
-//     const token = getItem(CANDIDATE_ACCESS_TOKEN);
-//     const details = await candidateGetUserDetails(token, () => {});
+  //     const token = getItem(CANDIDATE_ACCESS_TOKEN);
+  //     const details = await candidateGetUserDetails(token, () => {});
 
-//     if (details) {
-//       setFetchedResumeData(details);
-//       dispatch(candidateSetInitialData(details));
-//     }
+  //     if (details) {
+  //       setFetchedResumeData(details);
+  //       dispatch(candidateSetInitialData(details));
+  //     }
 
-//     setDetailsLoading(false);
-//   };
+  //     setDetailsLoading(false);
+  //   };
 
-//   fetchDetails();
-// }, []);
+  //   fetchDetails();
+  // }, []);
 
   useEffect(() => {
     if (hydrated) return;
@@ -674,11 +675,11 @@ const EmploymentDetailsPage = ({
           localData.empID ||
           fetchedResumeData?.resume_data?.Relevant_professional_experience?.id ||
           candidateDetails?.resume_data?.Relevant_professional_experience?.id;
-          const res = await candidateApi.put(
-            `/candidates/update-employment/${experienceId}`,
-            payload,
-            { headers },
-          )
+        const res = await candidateApi.put(
+          `/candidates/update-employment/${experienceId}`,
+          payload,
+          { headers },
+        )
         // const res = experienceId
         //   ? await candidateApi.put(
         //     `/candidates/update-employment/${experienceId}`,
@@ -764,12 +765,14 @@ const EmploymentDetailsPage = ({
           value={localData.isEmployed}
           onChange={handleToggleChange("isEmployed")}
         />
-        <YesNoToggle
-          label="Is this role relevant to your target job?"
-          name="is_relevant"
-          value={localData.is_relevant}
-          onChange={handleToggleChange("is_relevant")}
-        />
+        <Tooltip title="test">
+          <YesNoToggle
+            label="Is this role relevant to your target job?"
+            name="is_relevant"
+            value={localData.is_relevant}
+            onChange={handleToggleChange("is_relevant")}
+          />
+        </Tooltip>
       </Box>
 
       {localData.is_current ? (
