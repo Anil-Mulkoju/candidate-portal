@@ -24,7 +24,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   CANDIDATE_ACCESS_TOKEN,
   ACCESS_TOKEN,
-  getItem,,,
+  getItem,
 } from "../../../../../../utils/helper.js";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
