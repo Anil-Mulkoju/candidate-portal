@@ -11,7 +11,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Tooltip,,
+  Tooltip,
 } from "@mui/material";
 import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
