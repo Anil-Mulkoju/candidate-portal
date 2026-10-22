@@ -984,7 +984,7 @@ const EmploymentDetailsPage = ({
                   fullWidth
                   size="small"
                   type="number"
-                  label="Current CTC"
+                  label="Current Salary"
                   value={localData.currentSalary || ""}
                   onChange={handleInputChange("currentSalary")}
                   InputProps={{

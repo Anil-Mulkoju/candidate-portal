@@ -58,11 +58,16 @@ export const clearLocalStorage = () => {
 //     localStorage.removeItem(AUTH_VERSION);
 // }
 export const candidateClearLocalStorage = () => {
-    localStorage.removeItem(CANDIDATE_ACCESS_TOKEN)
-    localStorage.removeItem(CANDIDATE_REFRESH_TOKEN);
-    localStorage.removeItem(IS_AUTHENTICATED);
-    localStorage.removeItem(USER_TYPE);
-}
+  localStorage.removeItem(CANDIDATE_ACCESS_TOKEN);
+  localStorage.removeItem(CANDIDATE_REFRESH_TOKEN);
+  localStorage.removeItem("CANDIDATE_TOKEN_EXPIRY");
+  localStorage.removeItem("candidate_user");
+  localStorage.removeItem("is_new_user");
+  localStorage.removeItem(IS_AUTHENTICATED);
+  localStorage.removeItem(USER_TYPE);
+  localStorage.removeItem(ACCESS_TOKEN);
+  localStorage.removeItem(REFRESH_TOKEN);
+};
 // export const getUserData = () => {
 //     const data = localStorage.getItem(USER_DATA);
 //     return data && JSON.parse(data);

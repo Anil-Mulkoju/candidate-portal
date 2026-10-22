@@ -15,7 +15,7 @@ import {
   useMediaQuery,
   Badge,
 } from "@mui/material";
-import { Outlet, useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
@@ -26,7 +26,12 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HomeIcon from "@mui/icons-material/Home";
 import { palette, fonts } from "../theme/candidateTokens";
 import logoDark from "../assets/ri8fit-logo.svg";
-import { candidateClearLocalStorage, getItem } from "../utils/helper";
+import {
+  CANDIDATE_ACCESS_TOKEN,
+  IS_AUTHENTICATED,
+  candidateClearLocalStorage,
+  getItem,
+} from "../utils/helper";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Assessment, BusinessCenter, PeopleOutlineOutlined, Person, Person2, Person2Outlined } from "@mui/icons-material";
 import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined";
@@ -69,9 +74,10 @@ function CandidateLayout() {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
-  const [openLogoutMenu, setOpenLogoutMenu] = useState(false);
   const userInfo = getItem("candidate_user");
-  const user = JSON.parse(userInfo)
+  const user = userInfo ? JSON.parse(userInfo) : null;
+  const isAuthenticated = getItem(IS_AUTHENTICATED) === "true";
+  const candidateToken = getItem(CANDIDATE_ACCESS_TOKEN);
   console.log("candidateUser", user);
 
   const handleAvatarClick = (event) => {
@@ -255,10 +261,14 @@ const currentLabel = currentItem?.label || "Page";
   };
 
   const handleLogout = () => {
-    setOpenLogoutMenu(true)
-    candidateClearLocalStorage()
-    navigate("/for-candidate/login")
+    candidateClearLocalStorage();
+    navigate("/for-candidate/login", { replace: true });
+  };
+
+  if (!isAuthenticated || !candidateToken) {
+    return <Navigate to="/for-candidate/login" replace />;
   }
+
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: palette.bg || "#f7f9fa" }}>
       {/* TOP BAR — always full width, never moves, never duplicates */}
